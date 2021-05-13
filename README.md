@@ -11,11 +11,10 @@ This solution provides a *Blue/Green*, also known as an *Canary deployment*, by 
 In the following diagram, you can view the continuous delivery stages of AWS CodePipeline.
 
 1. Build Artifacts: Runs an AWS CodeBuild job to create AWS CloudFormation templates.
-2. Train: Trains an Amazon SageMaker pipeline and Baseline Processing Job
-3. Deploy Dev: Deploys a development Amazon SageMaker Endpoint
-4. Deploy Prod: Deploys an Amazon API Gateway endpoint, and AWS Lambda function in front of Amazon SageMaker Endpoints using AWS CodeDeploy for blue/green deployment and rollback.
+2. Deploy Dev: Deploys a development Amazon SageMaker Endpoint
+3. Deploy Prod: Deploys an Amazon API Gateway endpoint, and AWS Lambda function in front of Amazon SageMaker Endpoints using AWS CodeDeploy for blue/green deployment and rollback.
 
-![code-pipeline](docs/code-pipeline.png)
+![code-pipeline](docs/code-pipeline1.png)
 
 ###  Components Details
 
@@ -23,7 +22,7 @@ In the following diagram, you can view the continuous delivery stages of AWS Cod
   - [**AWS CodeBuild**](https://aws.amazon.com/codebuild/) – This solution uses AWS CodeBuild to build the source code from GitHub.
   - [**Amazon S3**](https://aws.amazon.com/s3/) – Artifacts created throughout the pipeline as well as the data for the model is stored in an Simple Storage Service (S3) Bucket.
   - [**AWS CloudFormation**](https://aws.amazon.com/cloudformation/) – This solution uses the AWS CloudFormation Template language, in either YAML or JSON, to create each resource including a custom resource.
-  - [**AWS Step Functions**](https://aws.amazon.com/step-functions/) – This solutions creates AWS StepFunctions to orchestrate Amazon SageMaker training and processing jobs.
+<!--  - [**AWS Step Functions**](https://aws.amazon.com/step-functions/) – This solutions creates AWS StepFunctions to orchestrate Amazon SageMaker training and processing jobs. -->
   - [**Amazon SageMaker**](https://aws.amazon.com/sagemaker/) – This solution uses Amazon SageMaker to train and deploy the machine learning model.
   - [**AWS CodeDeploy**](https://aws.amazon.com/codedeploy/) – This solution uses AWS CodeDeploy to automate shifting traffic between two AWS Lambda functions.
   - [**Amazon API Gateway**](https://aws.amazon.com/api-gateway/) – This solutions creates an HTTPS REST API endpoint for AWS Lambda functions that invoke deployed Amazon SageMaker Endpoint.
@@ -31,6 +30,7 @@ In the following diagram, you can view the continuous delivery stages of AWS Cod
 ## Deployment Steps
 
 The following is the list of steps required to get up and running with this sample.
+<!-- 
 
 ###  Prepare an AWS Account
 
@@ -75,6 +75,7 @@ You can launch the same stack using the AWS CLI. Here's an example:
        ParameterKey=GitHubToken,ParameterValue=YOURGITHUBTOKEN12345ab1234234
 `
 
+-->
 ###  Start, Test and Approve the Deployment
 
 Once the deployment is complete, there will be a new AWS CodePipeline created, with a Source stage that is linked to your source code repository. You will notice initially that it will be in a *Failed* state as it is waiting on an S3 data source.
@@ -128,22 +129,15 @@ This project is written in Python, and design to be customized for your own mode
 │   ├── deploy-model-prod.yml
 │   ├── suggest-baseline.yml
 │   └── training-job.yml
-├── custom_resource
-|   ├── __init__.py
-|   ├── sagemaker_monitoring_schedule.py
-|   ├── sagemaker_suggest_baseline.py
-|   ├── sagemaker_training_job.py
-│   └── sagemaker-custom-resource.yml
 ├── model
 │   ├── buildspec.yml
 │   ├── dashboard.json
 │   ├── requirements.txt
 │   └── run.py
-├── notebook
-│   ├── canary.js
-│   ├── dashboard.json
-│   └── mlops.ipynb
-└── pipeline.yml
+└── notebook
+    ├── canary.js
+    ├── dashboard.json
+    └── mlops.ipynb
 ```
 
 Edit the `get_training_params` method in the `model/run.py` script that is run as part of the AWS CodeBuild step to add your own estimator or model definition.
