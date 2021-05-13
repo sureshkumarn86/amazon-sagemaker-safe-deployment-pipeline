@@ -17,6 +17,9 @@ from stepfunctions.inputs import ExecutionInput
 from stepfunctions.workflow import Workflow
 
 
+def get_training_image(region):
+    return sagemaker.image_uris.retrieve(region=region, framework="xgboost", version="latest")
+
 def get_dev_config(model_name, job_id, role, image_uri, kms_key_id):
     return {
         "Parameters": {
